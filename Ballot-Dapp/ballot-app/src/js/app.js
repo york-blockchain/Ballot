@@ -22,18 +22,17 @@ App = {
     return App.initWeb3();
   },
 
-  initWeb3: function() {
+  initWeb3: async function() {
         // Is there is an injected web3 instance?
-    if (typeof web3 !== 'undefined') {
-      App.web3Provider = web3.currentProvider;
+    if (typeof ethereum !== 'undefined') {
+      App.web3Provider = ethereum;
     } else {
       // If no injected web3 instance is detected, fallback to the TestRPC
       App.web3Provider = new Web3.providers.HttpProvider(App.url);
     }
     web3 = new Web3(App.web3Provider);
 
-    ethereum.enable();
-
+    await ethereum.request({ method: 'eth_requestAccounts' });
     App.populateAddress();
     return App.initContract();
   },
